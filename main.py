@@ -14,9 +14,9 @@ import os
 requests
 '''
 
-rootPath = '/home/aimerneige/spider/duitang'
+rootPath = '/home/aimerneige/spider/duitang/'
 
-def getPicturesBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
+def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
     通过关键词搜索获取图片的json数据
     :param keyword: 搜索关键词
@@ -33,7 +33,7 @@ def getPicturesBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     jsonData = response.text
     return jsonData
 
-def getPicturesByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
+def getJsonByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
     """
     通过专辑id获取图片的json数据
     :param album_id:专辑id
@@ -80,27 +80,76 @@ def download(url, path, name):
     print("文件名：%s" % name)
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
 
-
-
-
+def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
+    allFlag = False
+    if (getAll == "y" or getAll == "Y" or getAll == "yes" or getAll == "Yes"):
+        allFlag = True
+    if allFlag:
+        limit = 100
+    else:
+        limit = input("你想要每次爬取多少张图片？（最大100）\n")
+    next_start = 0
+    while True:
+        # wtf? you need to simplify the code!
+        # jsonData = getJsonByAlbum(album_id, limit, next_start)
+        idFlag = False
+        if (withId == "y" or withId == "Y" or withId == "yes" or withId == "Yes"):
+            idFlag = True
+        if idFlag:
+            jsonData = getJsonByAlbum(value, limit, next_start)
+        else:
+            jsonData = getJsonBySearch(value, limit, next_start)
+        jsonItem = json.loads(jsonData)
+        if jsonItem['status'] != 1:
+            print("无法获取数据！这些信息可能会帮到你：\n%s" % jsonItem)
+            exit()
+        else:
+            data = jsonItem['data']
+            next_start = data['next_start']
+            objectList = data['object_list']
+            for objectItem in objectList:
+                photo = objectItem['photo']
+                size = photo['size']
+                if size <= minSize:
+                    continue
+                url = photo['path']
+                picId = objectItem['id']
+                nameEnd = re.findall(r'.*_(.*)', url)[0]
+                name = "%s_%s" % (picId, nameEnd)
+                download(url, rootPath, name)
+            more = data['more']
+            if more != 1:
+                print("已经没有更多图片了！")
+                break
+            if not allFlag:
+                a = ("还要继续爬吗 Y/N\n")
+                if (a == "y" or a == "Y" or a == "yes" or a == "Yes"):
+                    continue
+                else:
+                    break
+    
 
 def main():
-    print("这里是堆糖爬虫，请选择爬取类型")
-    print("1.\t通过关键词爬取")
-    print("2.\t通过专辑id爬取")
+    print("欢迎来到堆糖爬虫！作者：AimerNeige")
+    print("仅供个人学习使用，请勿用于非法用途！")
+    print("当前保存目录为%s，如果需要修改请修改源码" % rootPath)
+    print("请选择爬取类型")
+    print("1. 通过关键词爬取\t\t爬取关键词搜索结果")
+    print("2. 通过专辑id爬取\t\t爬取专辑的所有图片")
     status_way = input()
     if status_way == "1":
-        print("1")
-        # waiting for coding
+        keyword = input("请输入搜索关键词\n")
+        getAll = input("是否自动爬取全部图片 Y/N\n")
+        minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
+        useSearch(keyword, getAll, minSize)
     elif status_way == "2":
-        print("2")
-        # waiting for codoing
+        album_id = input("请输入专辑Id（url里面有）\n")
+        getAll = input("是否自动爬取全部图片 Y/N\n")
+        minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
+        useId()
     else:
         print("输入有误，请重新输入。")
         main()
-
-
-
 
 main()
 
@@ -138,7 +187,7 @@ def jsonParse(jsonData):
     print(status)
     data = jsonItem['data'] # 数据
     print(data)
-    nextStart = data['next_start'] # 下一页的索引
+    nextStart = data['next_start'] # 下一页的索引nex
     print(nextStart)
     objectList = data['object_list'] # 数据列表
     print(objectList)
