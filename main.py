@@ -2,12 +2,12 @@
 # -*- encoding: utf-8 -*-
 # Author:  AimerNeige
 
-# from urllib.request import urlretrieve
+from urllib.request import urlretrieve
 import requests
 import json
 # import time
 # import re
-# import os
+import os
 
 def getPicturesBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
