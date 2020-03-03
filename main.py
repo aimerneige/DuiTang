@@ -14,7 +14,7 @@ import os
 requests
 '''
 
-rootPath = '/home/aimerneige/spider/duitang/'
+rootPath = '/home/aimerneige/spider/duitang/hiten_new/'
 
 def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
@@ -77,7 +77,6 @@ def download(url, path, name):
     else:
         print("该目录下已经存在了同名文件！下载失败！")
     filesize = os.path.getsize(filePath)
-    print("文件名：%s" % name)
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
 
 def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
@@ -90,10 +89,8 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
         limit = input("你想要每次爬取多少张图片？（最大100）\n")
     next_start = 0
     while True:
-        # wtf? you need to simplify the code!
-        # jsonData = getJsonByAlbum(album_id, limit, next_start)
         idFlag = False
-        if (withId == "y" or withId == "Y" or withId == "yes" or withId == "Yes"):
+        if (withId == "y"):
             idFlag = True
         if idFlag:
             jsonData = getJsonByAlbum(value, limit, next_start)
@@ -109,9 +106,9 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
             objectList = data['object_list']
             for objectItem in objectList:
                 photo = objectItem['photo']
-                size = photo['size']
-                if size <= minSize:
-                    continue
+                # size = int(photo['size'])
+                # if size <= minSize:
+                #     continue
                 url = photo['path']
                 picId = objectItem['id']
                 nameEnd = re.findall(r'.*_(.*)', url)[0]
@@ -127,7 +124,6 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
                     continue
                 else:
                     break
-    
 
 def main():
     print("欢迎来到堆糖爬虫！作者：AimerNeige")
@@ -137,19 +133,21 @@ def main():
     print("1. 通过关键词爬取\t\t爬取关键词搜索结果")
     print("2. 通过专辑id爬取\t\t爬取专辑的所有图片")
     status_way = input()
+    withId = 'y'
+    value = "miku"
+    getAll = 'y'
     if status_way == "1":
-        keyword = input("请输入搜索关键词\n")
-        getAll = input("是否自动爬取全部图片 Y/N\n")
-        minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
-        useSearch(keyword, getAll, minSize)
+        withId = 'n'
+        value = input("请输入搜索关键词\n")
     elif status_way == "2":
-        album_id = input("请输入专辑Id（url里面有）\n")
-        getAll = input("是否自动爬取全部图片 Y/N\n")
-        minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
-        useId()
+        value = input("请输入专辑Id（url里面有）\n")
     else:
         print("输入有误，请重新输入。")
         main()
+    getAll = input("是否自动爬取全部图片 Y/N\n")
+    minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
+    minSize = minSize * 1024
+    spider(value, getAll, minSize, withId)
 
 main()
 
