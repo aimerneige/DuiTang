@@ -43,6 +43,37 @@ def getPicturesByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
     jsonData = response.text
     return jsonData
 
+def download(url, path, name):
+    """
+    下载文件
+    :param url: 文件链接
+    :param path: 保存目录
+    :param name: 文件名称
+    :return: None
+    """
+    def reporthook(a, b, c):
+        """
+        显示下载进度
+        :param a: 已经下载的数据块
+        :param b: 数据块的大小
+        :param c: 远程文件大小
+        :return: None
+        """
+        print("\rdownloading: %5.1f%%" % (a * b * 100.0 / c), end="")
+
+    filePath = os.path.join(path, name)
+    if not os.path.isfile(filePath):
+        print("开始下载：%s" % url)
+        urlretrieve(url, filePath, reporthook = reporthook)
+        print("下载完成！")
+    else:
+        print("该目录下已经存在了同名文件！下载失败！")
+    filesize = os.path.getsize(filePath)
+    print("文件名：%s" % name)
+    print("文件大小：%.2f Mb" % (filesize/1024/1024))
+
+
+
 
 def jsonParse(jsonData):
     """
