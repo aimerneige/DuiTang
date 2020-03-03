@@ -5,9 +5,16 @@
 from urllib.request import urlretrieve
 import requests
 import json
-# import time
-# import re
+import time
+import re
 import os
+
+'''
+需要下载的库
+requests
+'''
+
+rootPath = '/home/aimerneige/spider/duitang'
 
 def getPicturesBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
@@ -64,6 +71,7 @@ def download(url, path, name):
     filePath = os.path.join(path, name)
     if not os.path.isfile(filePath):
         print("开始下载：%s" % url)
+        print("文件名：%s" % name)
         urlretrieve(url, filePath, reporthook = reporthook)
         print("下载完成！")
     else:
@@ -71,6 +79,36 @@ def download(url, path, name):
     filesize = os.path.getsize(filePath)
     print("文件名：%s" % name)
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
+
+
+
+
+
+def main():
+    print("这里是堆糖爬虫，请选择爬取类型")
+    print("1.\t通过关键词爬取")
+    print("2.\t通过专辑id爬取")
+    status_way = input()
+    if status_way == "1":
+        print("1")
+        # waiting for coding
+    elif status_way == "2":
+        print("2")
+        # waiting for codoing
+    else:
+        print("输入有误，请重新输入。")
+        main()
+
+
+
+
+main()
+
+
+
+
+
+
 
 
 # 下载测试
