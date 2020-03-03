@@ -106,9 +106,9 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
             objectList = data['object_list']
             for objectItem in objectList:
                 photo = objectItem['photo']
-                # size = int(photo['size'])
-                # if size <= minSize:
-                #     continue
+                size = int(photo['size'])
+                if (size < minSize):
+                    continue
                 url = photo['path']
                 picId = objectItem['id']
                 nameEnd = re.findall(r'.*_(.*)', url)[0]
@@ -145,31 +145,11 @@ def main():
         print("输入有误，请重新输入。")
         main()
     getAll = input("是否自动爬取全部图片 Y/N\n")
-    minSize = input("被过滤图片的大小，小于或等于都不会下载（整数、单位kb）\n")
+    minSize = int(input("被过滤图片的大小，小于该数值则不会下载（整数、单位kb）\n"))
     minSize = minSize * 1024
     spider(value, getAll, minSize, withId)
 
 main()
-
-
-
-
-
-
-
-
-# 下载测试
-# jsonData = getPicturesBySearch("miku", 24, 0)
-# jsonItem = json.loads(jsonData)
-# data = jsonItem['data']
-# objectList = data['object_list']
-# for objectItem in objectList:
-#     photo = objectItem['photo']
-#     url = photo['path']
-#     itemId = objectItem['id']
-#     download(url, '/home/aimerneige/spider/duitang/', "%s.jpg" % itemId)
-
-
 
 '''
 def jsonParse(jsonData):
