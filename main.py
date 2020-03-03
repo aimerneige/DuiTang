@@ -72,33 +72,17 @@ def download(url, path, name):
     print("文件名：%s" % name)
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
 
-# def getAllPicPath(jsonData:'str') -> 'list':
-#     ret = []
-#     jsonItem = json.loads(jsonData)
-#     data = jsonItem['data']
-#     objectList = data['object_list']
-#     for objectItem in objectList:
-#         photo = objectItem['photo']
-#         path = photo['path']
-#         ret.append(path)
-#     return ret
 
-jsonData = getPicturesBySearch("欧阳娜娜", 24, 0)
-jsonItem = json.loads(jsonData)
-data = jsonItem['data']
-objectList = data['object_list']
-for objectItem in objectList:
-    photo = objectItem['photo']
-    url = photo['path']
-    itemId = objectItem['id']
-    download(url, '/home/aimerneige/spider/duitang/', "%s.jpg" % itemId)
-    
-
-# pathList = getAllPicPath(json)
-# i = 1
-# for path in pathList:
-#     download(path, '/home/aimerneige/spider/duitang/', "%d.jpg" % i)
-
+# 下载测试
+# jsonData = getPicturesBySearch("miku", 24, 0)
+# jsonItem = json.loads(jsonData)
+# data = jsonItem['data']
+# objectList = data['object_list']
+# for objectItem in objectList:
+#     photo = objectItem['photo']
+#     url = photo['path']
+#     itemId = objectItem['id']
+#     download(url, '/home/aimerneige/spider/duitang/', "%s.jpg" % itemId)
 
 
 
