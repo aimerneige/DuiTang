@@ -149,7 +149,7 @@ def main():
         print("输入有误，请重新输入。")
         main()
     getAll = input("是否自动爬取全部图片 Y/N\n")
-    minSize = int(input("被过滤图片的大小，小于该数值则不会下载（整数、单位kb）\n"))
+    minSize = int(input("输入被过滤图片的大小，小于该数值则不会下载（整数、单位kb）\n"))
     minSize = minSize * 1024
     spider(value, getAll, minSize, withId)
 
