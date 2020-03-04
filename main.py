@@ -5,7 +5,6 @@
 from urllib.request import urlretrieve
 import requests
 import json
-import time
 import re
 import os
 
@@ -14,7 +13,7 @@ import os
 requests
 '''
 
-rootPath = '/home/aimerneige/spider/duitang/hiten_new/'
+rootPath = '/home/aimerneige/spider/duitang/'
 
 def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
@@ -113,7 +112,12 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
                 picId = objectItem['id']
                 nameEnd = re.findall(r'.*_(.*)', url)[0]
                 name = "%s_%s" % (picId, nameEnd)
-                download(url, rootPath, name)
+                # if not os.path.exists(rootPath):
+                #     os.makedirs(rootPath)
+                newPath = os.path.join(rootPath, "%s/" % value)
+                if not os.path.exists(newPath):
+                    os.makedirs(newPath)
+                download(url, newPath, name)
             more = data['more']
             if more != 1:
                 print("已经没有更多图片了！")
