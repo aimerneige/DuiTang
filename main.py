@@ -15,6 +15,7 @@ requests
 
 rootPath = '/home/aimerneige/spider/duitang/'
 
+
 def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     """
     通过关键词搜索获取图片的json数据
@@ -32,6 +33,7 @@ def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     jsonData = response.text
     return jsonData
 
+
 def getJsonByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
     """
     通过专辑id获取图片的json数据
@@ -48,6 +50,7 @@ def getJsonByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
     response.encoding = 'utf-8'
     jsonData = response.text
     return jsonData
+
 
 def download(url, path, name):
     """
@@ -78,9 +81,10 @@ def download(url, path, name):
     filesize = os.path.getsize(filePath)
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
 
+
 def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
     allFlag = False
-    if (getAll == "y" or getAll == "Y" or getAll == "yes" or getAll == "Yes"):
+    if getAll == "y" or getAll == "Y" or getAll == "yes" or getAll == "Yes":
         allFlag = True
     if allFlag:
         limit = 100
@@ -89,7 +93,7 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
     next_start = 0
     while True:
         idFlag = False
-        if (withId == "y"):
+        if withId == "y":
             idFlag = True
         if idFlag:
             jsonData = getJsonByAlbum(value, limit, next_start)
@@ -106,7 +110,7 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
             for objectItem in objectList:
                 photo = objectItem['photo']
                 size = int(photo['size'])
-                if (size < minSize):
+                if size < minSize:
                     continue
                 url = photo['path']
                 picId = objectItem['id']
@@ -124,10 +128,11 @@ def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
                 break
             if not allFlag:
                 a = ("还要继续爬吗 Y/N\n")
-                if (a == "y" or a == "Y" or a == "yes" or a == "Yes"):
+                if a == "y" or a == "Y" or a == "yes" or a == "Yes":
                     continue
                 else:
                     break
+
 
 def main():
     print("欢迎来到堆糖爬虫！作者：AimerNeige")
@@ -153,7 +158,9 @@ def main():
     minSize = minSize * 1024
     spider(value, getAll, minSize, withId)
 
+
 main()
+
 
 '''
 def jsonParse(jsonData):
