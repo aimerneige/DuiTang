@@ -1,6 +1,6 @@
 # DuiTang
 
-堆糖爬虫
+[堆糖](https://www.duitang.com/)爬虫
 
 ## 使用方法
 
