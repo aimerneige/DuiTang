@@ -16,7 +16,7 @@ requests
 rootPath = '/home/aimerneige/spider/duitang/'
 
 
-def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
+def getJsonBySearch(keyword:str, limit:int, start:int) -> str:
     """
     通过关键词搜索获取图片的json数据
     :param keyword: 搜索关键词
@@ -34,13 +34,13 @@ def getJsonBySearch(keyword:'str', limit:'int', start:'int') -> 'str':
     return jsonData
 
 
-def getJsonByAlbum(album_id:'str', limit:'int', start:'int') -> 'str':
+def getJsonByAlbum(album_id:str, limit:int, start:int) -> str:
     """
     通过专辑id获取图片的json数据
-    :param album_id:专辑id
-    :param limit:   返回数据数量限制（最大为100，使用大于100的数据会按照100处理）
-    :param start:   从何处开始访问数据（索引）
-    :return str:    json数据
+    :param album_id: 专辑id
+    :param limit:    返回数据数量限制（最大为100，使用大于100的数据会按照100处理）
+    :param start:    从何处开始访问数据（索引）
+    :return str:     json数据
     """
     url = "https://www.duitang.com/napi/blog/list/by_album/?album_id=%s&limit=%d&start=%d" % (album_id, limit, start)
     response = requests.get(url)
@@ -82,7 +82,7 @@ def download(url, path, name):
     print("文件大小：%.2f Mb" % (filesize/1024/1024))
 
 
-def spider(value:'str', getAll:'str', minSize:'int', withId:'str'):
+def spider(value:str, getAll:str, minSize:int, withId:str):
     allFlag = False
     if getAll == "y" or getAll == "Y" or getAll == "yes" or getAll == "Yes":
         allFlag = True
@@ -158,8 +158,8 @@ def main():
     minSize = minSize * 1024
     spider(value, getAll, minSize, withId)
 
-
-main()
+if __name__ == "__main__":
+    main()
 
 
 '''
